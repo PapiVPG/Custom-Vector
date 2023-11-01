@@ -8,8 +8,8 @@ class Vector {
 	size_t m_capacity;
 public:
 	Vector();
-	Vector( const Vector& vector );
-	Vector( const Vector&& vector );
+	Vector( Vector& vector );
+	Vector( Vector&& vector );
 	Vector( size_t size );
 	~Vector() { arr = nullptr; m_size = m_capacity = 0; delete []arr; };
 
