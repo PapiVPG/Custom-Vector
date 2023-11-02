@@ -1,0 +1,4 @@
+/mnt/c/MyRepo/Custom-Vector/build/CMakeFiles/a.out.dir
+/mnt/c/MyRepo/Custom-Vector/build/CMakeFiles/test.dir
+/mnt/c/MyRepo/Custom-Vector/build/CMakeFiles/edit_cache.dir
+/mnt/c/MyRepo/Custom-Vector/build/CMakeFiles/rebuild_cache.dir

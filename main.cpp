@@ -1,41 +1,44 @@
 #include <iostream>
 #include "vector.h"
 #include "vector.cpp"
+#include <gtest/gtest.h>
 
 using namespace std;
 
-int main()
+TEST( VectorTest, initialization )
 {
-	Vector<int> vector;
-	Vector<int> vector_2(5);
+	const size_t SIZE = 5;
+	Vector<int> vector( SIZE );
+	Vector<int> vector_2;
+	
+	EXPECT_EQ( vector.size(), SIZE );
+	ASSERT_FALSE( vector.empty() );
+	ASSERT_TRUE( vector_2.empty() );
+}
 
-	for( size_t i = 0; i < 5; i++ )
-	{
-		vector.push_back( i * 5 );
-	}
-	cout << "size " << vector_2.size() << endl;
-	Vector<int> vector_3( vector );
-	Vector<int> vector_4( std::move( vector ) );
+TEST( VectorTest, operation_on_vector )
+{
+	const size_t SIZE = 5;
+	Vector<int> vector( SIZE );
 
-	for( size_t i = 0; i < 5; i++ )
-	{
-		vector_2.push_back( i * 25 );
-	}
-	cout << "size " << vector_2.size() << endl;
-	//for( size_t i = 0; i < 5; i++ )
-	//{
-	//	cout<<vector[ i ]<<" ";
-	//}
-	cout << endl;
+	const int TEST_VALUE = 5;
+	vector.push_back( TEST_VALUE );
+	EXPECT_EQ( vector[ 0 ], TEST_VALUE );
 
-	for( auto& x : vector_2 )
-		cout << x << endl;
+	vector.push_back( TEST_VALUE * 2 );
+	EXPECT_EQ( vector[ 1 ], TEST_VALUE * 2 );
+	EXPECT_EQ( vector.capacity(), 2 );
 
-	for( auto& x : vector_3 )
-		cout << x << endl;
+	vector.pop_back();
+	EXPECT_EQ( vector.size(), 4 );
 
-	for( auto& x : vector_4 )
-		cout << x << endl;
+	vector.clear();
+	EXPECT_EQ( vector.size(), 0 );
 
-	return 0;
+}
+
+int main( int argc, char** argv )
+{
+	::testing::InitGoogleTest( &argc, argv );
+	return RUN_ALL_TESTS();
 }

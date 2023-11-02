@@ -1,5 +1,8 @@
 #include "vector.h"
 #include <cassert>
+#include <stddef.h>
+
+using namespace std;
 
 template< typename T >
 Vector< T >::Vector() : m_size( 0 ), m_capacity( 0 ), arr( nullptr ){};
@@ -93,8 +96,7 @@ template< typename T >
 void Vector< T >::clear()
 {
 	m_size = 0;
-	for( auto& element : arr )
-		element = 0;
+	this->~Vector();
 }
 
 template< typename T >
