@@ -1,14 +1,11 @@
 #include "vector.h"
 #include <cassert>
-#include <stddef.h>
-
-using namespace std;
 
 template< typename T >
-Vector< T >::Vector() : m_size( 0 ), m_capacity( 0 ), arr( nullptr ){};
+Vector< T >::Vector() : m_size( 0 ), m_capacity( 0 ), arr( nullptr ){}
 
 template<typename T>
-Vector<T>::Vector( Vector& vector )
+Vector< T >::Vector( const Vector& vector )
 {
 	m_size = m_capacity = vector.size();
 	arr = new T[ m_size ];
@@ -16,10 +13,10 @@ Vector<T>::Vector( Vector& vector )
 	{
 		arr[ i ] = vector[ i ];
 	}
-};
+}
 
-template<typename T>
-Vector<T>::Vector( Vector&& vector )
+template< typename T >
+Vector< T >::Vector( Vector&& vector )
 {
 	m_size = m_capacity = vector.size();
 
@@ -29,13 +26,42 @@ Vector<T>::Vector( Vector&& vector )
 		arr[ i ] = vector[ i ];
 	}
 	vector.~Vector();
-};
+}
 
 template< typename T >
 Vector< T >::Vector( size_t size ) : arr( new T[ size ] ), m_size( size )
 {
 	m_capacity = 0;
-};
+}
+
+template< typename T >
+Vector< T >& Vector< T >::operator=( const Vector< T >& vector )
+{
+	if( this != &vector )
+	{
+		delete[] arr;
+		this->m_capacity = this->m_size = vector.size();
+		arr = new T[ m_size ];
+		for( size_t i = 0; i < m_size; i++ )
+		{
+			arr[ i ] = vector[ i ];
+		}
+	}
+	return *this;
+}
+
+template<typename T>
+Vector< T >& Vector< T >::operator=( Vector< T >&& vector )
+{
+	if( this != &vector )
+	{
+		delete[] arr;
+		this->m_capacity = this->m_size = vector.size();
+		arr = get_arr( vector );
+		vector.clear();
+	}
+	return *this;
+}
 
 template< typename T >
 void Vector< T >::push_back( T value )
@@ -60,7 +86,7 @@ void Vector< T >::new_allocation()
 	{
 		temp[ i ] = arr[ i ];
 	}
-	delete []arr;
+	delete[] arr;
 	arr = temp;
 }
 
@@ -70,14 +96,14 @@ bool Vector< T >::empty()
 	return m_size == 0;
 }
 
-template<typename T>
-size_t Vector<T>::size()
+template< typename T >
+size_t Vector< T >::size() const
 {
 	return m_size;
 }
 
-template<typename T>
-size_t Vector<T>::capacity()
+template< typename T >
+size_t Vector< T >::capacity() const
 {
 	return m_capacity;
 }
@@ -95,26 +121,30 @@ void Vector< T >::pop_back()
 template< typename T >
 void Vector< T >::clear()
 {
-	m_size = 0;
 	this->~Vector();
 }
 
 template< typename T >
-T Vector< T >::operator[]( size_t index )
+T& Vector< T >::operator[]( size_t index ) const
 {
 	assert( ( "index is bigger than size of the vector", index < m_size ) );
 	return arr[ index ];
 }
 
-template<typename T>
-T* Vector<T>::begin()
+template< typename T >
+T* Vector< T >::begin()
 {
 	return m_size > 0 ? arr : nullptr;
 }
 
-template<typename T>
-T* Vector<T>::end()
+template< typename T >
+T* Vector< T >::end()
 {
 	return arr + m_size;
 }
 
+template< typename T >
+T* get_arr( Vector< T >& vector )
+{
+	return vector.data;
+}

@@ -8,22 +8,26 @@ class Vector {
 	size_t m_capacity;
 public:
 	Vector();
-	Vector( Vector& vector );
+	Vector( const Vector& vector );
 	Vector( Vector&& vector );
 	Vector( size_t size );
-	~Vector() { arr = nullptr; m_size = m_capacity = 0; delete []arr; };
+	~Vector() { delete[] arr; m_size = m_capacity = 0; arr = nullptr; };
 
 	void new_allocation();
 	void push_back( T value );
 	bool empty();
-	size_t size();
-	size_t capacity();
+	size_t size() const;
+	size_t capacity() const;
 	void pop_back();
 	void clear();
 
-	T operator[]( size_t index );
+	Vector< T >& operator=( const Vector< T >& vector );
+	Vector< T >& operator=( Vector< T >&& vector );
+	T& operator[]( size_t index ) const;
 	T* begin();
 	T* end();
+
+	friend T* get_arr( Vector< T >& vector );
 };
 
 #endif
