@@ -53,11 +53,19 @@ Vector< T >& Vector< T >::operator=( const Vector< T >& vector )
 template<typename T>
 Vector< T >& Vector< T >::operator=( Vector< T >&& vector )
 {
+	using namespace std;
 	if( this != &vector )
 	{
-		delete[] arr;
+		if( !empty() )
+		{
+			delete[] arr;
+		}
 		this->m_capacity = this->m_size = vector.size();
-		arr = get_arr( vector );
+		arr = new T[ m_size ];
+		for( size_t i = 0; i < m_size; i++ )
+		{
+			arr[ i ] = vector[ i ];
+		}
 		vector.clear();
 	}
 	return *this;
@@ -146,5 +154,5 @@ T* Vector< T >::end()
 template< typename T >
 T* get_arr( Vector< T >& vector )
 {
-	return vector.data;
+	return vector.arr;
 }

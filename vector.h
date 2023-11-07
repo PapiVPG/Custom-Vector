@@ -1,6 +1,9 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+template< typename T > class Vector;
+template< typename T > T* get_arr( Vector< T >& vector );
+
 template< typename T >
 class Vector {
 	T* arr;
@@ -27,8 +30,7 @@ public:
 	T* begin();
 	T* end();
 
-	friend T* get_arr( Vector< T >& vector );
+	friend T* get_arr<>( Vector< T >& vector );
 };
 
 #endif
-
