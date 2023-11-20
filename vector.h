@@ -1,6 +1,8 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include <initializer_list>
+
 template< typename T >
 class Vector {
 public:
@@ -8,6 +10,7 @@ public:
 	explicit Vector( const Vector& vector );
 	explicit Vector( Vector&& vector ) noexcept;
 	explicit Vector( size_t size );
+	explicit Vector( const std::initializer_list< T > ilist );
 	~Vector() { clear(); };
 
 	void push_back( const T& value );
@@ -31,4 +34,3 @@ private:
 };
 
 #endif
-

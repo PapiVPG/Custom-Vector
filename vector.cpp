@@ -30,6 +30,15 @@ template< typename T >
 Vector< T >::Vector( size_t size ) : m_arr( new T[ size ] ), m_size( 0 ), m_capacity( size ){}
 
 template< typename T >
+Vector< T >::Vector( const std::initializer_list< T > ilist ) : Vector()
+{
+	for (auto& elem : ilist)
+	{
+		push_back( elem );
+	}
+}
+
+template< typename T >
 Vector< T >& Vector< T >::operator=( const Vector< T >& vector )
 {
 	if( this != &vector )
@@ -141,10 +150,4 @@ template< typename T >
 T* Vector< T >::end()
 {
 	return m_arr + m_size;
-}
-
-template< typename T >
-T* get_arr( Vector< T >& vector )
-{
-	return vector.m_arr;
 }
