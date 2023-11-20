@@ -7,9 +7,10 @@ Vector< T >::Vector() : m_size( 0 ), m_capacity( 0 ), m_arr( nullptr ){}
 template<typename T>
 Vector< T >::Vector( const Vector& vector )
 {
-	m_size = m_capacity = vector.size();
-	m_arr = new T[ m_size ];
-	for( size_t i = 0; i < m_size; i++ )
+	m_size = vector.m_size;
+	m_capacity = vector.capacity;
+	m_arr = new T[ m_capacity ];
+	for( size_t i = 0; i < m_capacity; i++ )
 	{
 		m_arr[ i ] = vector[ i ];
 	}
