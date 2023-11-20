@@ -26,11 +26,8 @@ Vector< T >::Vector( Vector&& vector ) noexcept
 	vector.m_arr = nullptr;
 }
 
-//template< typename T >
-//Vector< T >::Vector( size_t size ) : m_arr( new T[ size ] ), m_size( size )
-//{
-//	m_capacity = 0;
-//}
+template< typename T >
+Vector< T >::Vector( size_t size ) : m_arr( new T[ size ] ), m_size( 0 ), m_capacity( size ){}
 
 template< typename T >
 Vector< T >& Vector< T >::operator=( const Vector< T >& vector )

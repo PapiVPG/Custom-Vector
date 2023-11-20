@@ -7,7 +7,7 @@ public:
 	explicit Vector();
 	explicit Vector( const Vector& vector );
 	explicit Vector( Vector&& vector ) noexcept;
-	//explicit Vector( size_t size );
+	explicit Vector( size_t size );
 	~Vector() { clear(); };
 
 	void push_back( const T& value );
