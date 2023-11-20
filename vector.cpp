@@ -41,7 +41,7 @@ Vector< T >::Vector( const size_t size ) : m_size( 0 ), m_capacity( size )
 {
 	try
 	{
-		m_arr( new T[ size ] );
+		m_arr = new T[ size ];
 	}
 	catch( std::bad_alloc& e )
 	{
@@ -72,7 +72,10 @@ Vector< T >& Vector< T >::operator=( const Vector< T >& vector )
 			m_capacity = vector.m_capacity;
 			m_size = vector.m_size;
 			m_arr = new T[ m_capacity ];
-			m_arr = vector.m_arr;
+			for( size_t i = 0; i < m_capacity; i++ )
+			{
+				m_arr[ i ] = vector.m_arr[ i ];
+			}
 		}
 		catch( std::bad_alloc& e )
 		{
@@ -135,8 +138,8 @@ bool Vector< T >::empty()
 	return m_size == 0;
 }
 
-template<typename T>
-void Vector<T>::assign( size_t count, const T& value )
+template< typename T >
+void Vector< T >::assign( size_t count, const T& value )
 {
 	clear();
 	while ( count-- )
@@ -151,8 +154,8 @@ size_t Vector< T >::size() const
 	return m_size;
 }
 
-template<typename T>
-void Vector<T>::resize( const size_t count )
+template< typename T >
+void Vector< T >::resize( const size_t count )
 {
 	if ( count > m_size )
 	{
@@ -179,8 +182,8 @@ void Vector< T >::pop_back()
 	}
 }
 
-template<typename T>
-T& Vector<T>::at(const size_t pos) const
+template< typename T >
+T& Vector< T >::at(const size_t pos) const
 {
 	if( pos >= m_size )
 	{
@@ -189,8 +192,8 @@ T& Vector<T>::at(const size_t pos) const
 	return m_arr[ pos ];
 }
 
-template<typename T>
-T& Vector<T>::front() const
+template< typename T >
+T& Vector< T >::front() const
 {
 	if( m_arr )
 	{
@@ -200,8 +203,8 @@ T& Vector<T>::front() const
 	return temp;
 }
 
-template<typename T>
-T& Vector<T>::back() const
+template< typename T >
+T& Vector< T >::back() const
 {
 	if( m_arr )
 	{
@@ -235,8 +238,8 @@ T* Vector< T >::begin()
 	return m_size > 0 ? m_arr : nullptr;
 }
 
-template<typename T>
-const T* Vector<T>::cbegin()
+template< typename T >
+const T* Vector< T >::cbegin()
 {
 	return m_size > 0 ? m_arr : nullptr;
 }
@@ -247,8 +250,8 @@ T* Vector< T >::end()
 	return m_arr + m_size;
 }
 
-template<typename T>
-const T* Vector<T>::cend()
+template< typename T >
+const T* Vector< T >::cend()
 {
 	return m_size > 0 ? m_arr : nullptr;
 }
