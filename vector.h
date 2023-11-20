@@ -7,10 +7,10 @@ public:
 	explicit Vector();
 	explicit Vector( const Vector& vector );
 	explicit Vector( Vector&& vector ) noexcept;
-	explicit Vector( size_t size );
+	//explicit Vector( size_t size );
 	~Vector() { clear(); };
 
-	void push_back( T value );
+	void push_back( const T& value );
 	bool empty();
 	size_t size() const;
 	size_t capacity() const;

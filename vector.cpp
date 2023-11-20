@@ -26,11 +26,11 @@ Vector< T >::Vector( Vector&& vector ) noexcept
 	vector.m_arr = nullptr;
 }
 
-template< typename T >
-Vector< T >::Vector( size_t size ) : m_arr( new T[ size ] ), m_size( size )
-{
-	m_capacity = 0;
-}
+//template< typename T >
+//Vector< T >::Vector( size_t size ) : m_arr( new T[ size ] ), m_size( size )
+//{
+//	m_capacity = 0;
+//}
 
 template< typename T >
 Vector< T >& Vector< T >::operator=( const Vector< T >& vector )
@@ -43,7 +43,7 @@ Vector< T >& Vector< T >::operator=( const Vector< T >& vector )
 		}
 		m_capacity = vector.m_capacity;
 		m_size = vector.m_size;
-		m_arr = new T[ m_size ];
+		m_arr = new T[ m_capacity ];
 		m_arr = vector.m_arr;
 	}
 	return *this;
@@ -64,30 +64,29 @@ Vector< T >& Vector< T >::operator=( Vector< T >&& vector ) noexcept
 }
 
 template< typename T >
-void Vector< T >::push_back( T value )
+void Vector< T >::push_back( const T& value )
 {
 	if( m_size == m_capacity )
 	{
 		new_allocation();
-		m_arr[ m_size++ ] = value;
 	}
-	else
-	{
-		m_arr[ m_capacity ] = value;
-	}
-	++m_capacity;
+	m_arr[ m_size++ ] = value;
 }
 
 template< typename T >
 void Vector< T >::new_allocation()
 {
-	T* temp = new T[ m_size + 1 ];
-	for( size_t i = 0; i < m_size; ++i )
+	m_capacity = m_capacity == 0 ? 1 : m_capacity * 2;
+	T* tempArr = new T[ m_capacity ];
+	if( m_arr != nullptr )
 	{
-		temp[ i ] = m_arr[ i ];
+		for( size_t i = 0; i < m_capacity; ++i )
+		{
+			tempArr[ i ] = m_arr[ i ];
+		}
+		delete[] m_arr;
 	}
-	delete[] m_arr;
-	m_arr = temp;
+	m_arr = tempArr;
 }
 
 template< typename T >
@@ -111,11 +110,10 @@ size_t Vector< T >::capacity() const
 template< typename T >
 void Vector< T >::pop_back()
 {
-	if( empty() )
+	if( !empty() )
 	{
-		return;
+		--m_size;
 	}
-	--m_size;
 }
 
 template< typename T >
@@ -124,7 +122,7 @@ void Vector< T >::clear()
 	m_capacity = m_size = 0;
 	if ( m_arr )
 	{
-		delete[]m_arr;
+		delete[] m_arr;
 	}
 	m_arr = nullptr;
 }
@@ -132,7 +130,7 @@ void Vector< T >::clear()
 template< typename T >
 T& Vector< T >::operator[]( size_t index ) const
 {
-	assert( ( "index is bigger than size of the vector", index < m_size ) );
+	assert( ( "index is bigger than size of the vector", index < m_capacity ) );
 	return m_arr[ index ];
 }
 
