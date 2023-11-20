@@ -56,13 +56,11 @@ Vector< T >& Vector< T >::operator=( Vector< T >&& vector )
 {
 	if( this != &vector )
 	{
-		if( !empty() )
-		{
-			/*delete[] m_arr;*/
-		}
-		this->m_capacity = this->m_size = vector.size();
-		m_arr = get_arr( vector );
-		//vector.clear();
+		m_capacity = vector.m_capacity;
+		m_size = vector.m_size;
+		m_arr = vector.m_arr;
+		vector.m_capacity = vector.m_size = 0;
+		vector.m_arr = nullptr;
 	}
 	return *this;
 }
