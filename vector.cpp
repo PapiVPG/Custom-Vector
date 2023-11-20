@@ -1,4 +1,5 @@
 #include "vector.h"
+#include <string>
 #include <cassert>
 
 template< typename T >
@@ -12,7 +13,7 @@ Vector< T >::Vector( const Vector& vector )
 	m_arr = new T[ m_capacity ];
 	for( size_t i = 0; i < m_capacity; i++ )
 	{
-		m_arr[ i ] = vector[ i ];
+		m_arr[ i ] = vector.m_arr[ i ];
 	}
 }
 
@@ -27,7 +28,7 @@ Vector< T >::Vector( Vector&& vector ) noexcept
 }
 
 template< typename T >
-Vector< T >::Vector( size_t size ) : m_arr( new T[ size ] ), m_size( 0 ), m_capacity( size ){}
+Vector< T >::Vector( const size_t size ) : m_arr( new T[ size ] ), m_size( 0 ), m_capacity( size ){}
 
 template< typename T >
 Vector< T >::Vector( const std::initializer_list< T > ilist ) : Vector()
@@ -101,10 +102,33 @@ bool Vector< T >::empty()
 	return m_size == 0;
 }
 
+template<typename T>
+void Vector<T>::assign( size_t count, const T& value )
+{
+	clear();
+	while ( count-- )
+	{
+		push_back( value );
+	}
+}
+
 template< typename T >
 size_t Vector< T >::size() const
 {
 	return m_size;
+}
+
+template<typename T>
+void Vector<T>::resize( const size_t count )
+{
+	if ( count > m_size )
+	{
+		while ( count > m_capacity )
+		{
+			new_allocation();
+		}
+		m_size = count;
+	}
 }
 
 template< typename T >
@@ -122,6 +146,38 @@ void Vector< T >::pop_back()
 	}
 }
 
+template<typename T>
+T& Vector<T>::at(const size_t pos) const
+{
+	if( pos >= m_size )
+	{
+		throw "at(): " + std::to_string( pos ) + "Position out of range\n";
+	}
+	return m_arr[ pos ];
+}
+
+template<typename T>
+T& Vector<T>::front() const
+{
+	if( m_arr )
+	{
+		return *m_arr;
+	}
+	T temp;
+	return temp;
+}
+
+template<typename T>
+T& Vector<T>::back() const
+{
+	if( m_arr )
+	{
+		return m_arr[ m_size - 1 ];
+	}
+	T temp;
+	return temp;
+}
+
 template< typename T >
 void Vector< T >::clear()
 {
@@ -134,7 +190,7 @@ void Vector< T >::clear()
 }
 
 template< typename T >
-T& Vector< T >::operator[]( size_t index ) const
+T& Vector< T >::operator[]( const size_t index )
 {
 	assert( ( "index is bigger than size of the vector", index < m_capacity ) );
 	return m_arr[ index ];
@@ -146,8 +202,20 @@ T* Vector< T >::begin()
 	return m_size > 0 ? m_arr : nullptr;
 }
 
+template<typename T>
+const T* Vector<T>::cbegin()
+{
+	return m_size > 0 ? m_arr : nullptr;
+}
+
 template< typename T >
 T* Vector< T >::end()
 {
 	return m_arr + m_size;
+}
+
+template<typename T>
+const T* Vector<T>::cend()
+{
+	return m_size > 0 ? m_arr : nullptr;
 }
