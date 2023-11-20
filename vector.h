@@ -1,22 +1,15 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-template< typename T > class Vector;
-template< typename T > T* get_arr( Vector< T >& vector );
-
 template< typename T >
 class Vector {
-	T* arr;
-	size_t m_size;
-	size_t m_capacity;
 public:
-	Vector();
-	Vector( const Vector& vector );
-	Vector( Vector&& vector );
-	Vector( size_t size );
-	~Vector() { delete[] arr; m_size = m_capacity = 0; arr = nullptr; };
+	explicit Vector();
+	explicit Vector( const Vector& vector );
+	explicit Vector( Vector&& vector );
+	explicit Vector( size_t size );
+	~Vector() { delete[] m_arr; m_size = m_capacity = 0; m_arr = nullptr; };
 
-	void new_allocation();
 	void push_back( T value );
 	bool empty();
 	size_t size() const;
@@ -30,7 +23,12 @@ public:
 	T* begin();
 	T* end();
 
-	friend T* get_arr<>( Vector< T >& vector );
+private:
+	T* m_arr;
+	size_t m_size;
+	size_t m_capacity;
+	void new_allocation();
 };
 
 #endif
+
