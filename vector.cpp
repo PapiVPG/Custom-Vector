@@ -15,7 +15,7 @@ Vector< T >::Vector( const Vector& vector )
 		m_size = vector.m_size;
 		m_capacity = vector.m_capacity;
 		m_arr = new T[ m_capacity ];
-		for( size_t i = 0; i < m_capacity; i++ )
+		for( size_t i = 0; i < m_size; ++i )
 		{
 			m_arr[ i ] = vector.m_arr[ i ];
 		}
@@ -37,11 +37,15 @@ Vector< T >::Vector( Vector&& vector ) noexcept
 }
 
 template< typename T >
-Vector< T >::Vector( const size_t size ) : m_size( 0 ), m_capacity( size )
+Vector< T >::Vector( const size_t size ) : m_size( size ), m_capacity( size )
 {
 	try
 	{
 		m_arr = new T[ size ];
+		for( size_t i = 0; i < m_size; ++i )
+		{
+			m_arr[ i ] = 0;
+		}
 	}
 	catch( std::bad_alloc& e )
 	{
@@ -72,7 +76,7 @@ Vector< T >& Vector< T >::operator=( const Vector< T >& vector )
 			m_capacity = vector.m_capacity;
 			m_size = vector.m_size;
 			m_arr = new T[ m_capacity ];
-			for( size_t i = 0; i < m_capacity; i++ )
+			for( size_t i = 0; i < m_size; ++i )
 			{
 				m_arr[ i ] = vector.m_arr[ i ];
 			}
@@ -118,7 +122,7 @@ void Vector< T >::new_allocation()
 		T* tempArr = new T[ m_capacity ];
 		if ( m_arr != nullptr )
 		{
-			for ( size_t i = 0; i < m_capacity; ++i )
+			for ( size_t i = 0; i < m_size; ++i )
 			{
 				tempArr[ i ] = m_arr[ i ];
 			}
@@ -163,7 +167,12 @@ void Vector< T >::resize( const size_t count )
 		{
 			new_allocation();
 		}
+		size_t t = m_size;
 		m_size = count;
+		for( size_t i = t; i < m_size; ++i )
+		{
+			m_arr[ i ] = 0;
+		}
 	}
 }
 
@@ -228,7 +237,7 @@ void Vector< T >::clear()
 template< typename T >
 T& Vector< T >::operator[]( const size_t index )
 {
-	assert( ( "index is bigger than size of the vector", index < m_capacity ) );
+	assert( ( "index is bigger than size of the vector", index < m_size ) );
 	return m_arr[ index ];
 }
 
