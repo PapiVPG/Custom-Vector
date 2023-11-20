@@ -1,6 +1,8 @@
 #include "vector.h"
 #include <string>
 #include <cassert>
+#include <iostream>
+#include <stdexcept>
 
 template< typename T >
 Vector< T >::Vector() : m_size( 0 ), m_capacity( 0 ), m_arr( nullptr ){}
@@ -8,12 +10,19 @@ Vector< T >::Vector() : m_size( 0 ), m_capacity( 0 ), m_arr( nullptr ){}
 template<typename T>
 Vector< T >::Vector( const Vector& vector )
 {
-	m_size = vector.m_size;
-	m_capacity = vector.m_capacity;
-	m_arr = new T[ m_capacity ];
-	for( size_t i = 0; i < m_capacity; i++ )
+	try
 	{
-		m_arr[ i ] = vector.m_arr[ i ];
+		m_size = vector.m_size;
+		m_capacity = vector.m_capacity;
+		m_arr = new T[ m_capacity ];
+		for( size_t i = 0; i < m_capacity; i++ )
+		{
+			m_arr[ i ] = vector.m_arr[ i ];
+		}
+	}
+	catch( std::bad_alloc& e )
+	{
+		std::cerr<<e.what()<<std::endl;
 	}
 }
 
@@ -28,7 +37,17 @@ Vector< T >::Vector( Vector&& vector ) noexcept
 }
 
 template< typename T >
-Vector< T >::Vector( const size_t size ) : m_arr( new T[ size ] ), m_size( 0 ), m_capacity( size ){}
+Vector< T >::Vector( const size_t size ) : m_size( 0 ), m_capacity( size )
+{
+	try
+	{
+		m_arr( new T[ size ] );
+	}
+	catch( std::bad_alloc& e )
+	{
+		std::cerr<<e.what()<<std::endl;
+	}
+}
 
 template< typename T >
 Vector< T >::Vector( const std::initializer_list< T > ilist ) : Vector()
@@ -44,14 +63,21 @@ Vector< T >& Vector< T >::operator=( const Vector< T >& vector )
 {
 	if( this != &vector )
 	{
-		if( m_arr )
+		try
 		{
-			delete[] m_arr;
+			if ( m_arr )
+			{
+				delete[] m_arr;
+			}
+			m_capacity = vector.m_capacity;
+			m_size = vector.m_size;
+			m_arr = new T[ m_capacity ];
+			m_arr = vector.m_arr;
 		}
-		m_capacity = vector.m_capacity;
-		m_size = vector.m_size;
-		m_arr = new T[ m_capacity ];
-		m_arr = vector.m_arr;
+		catch( std::bad_alloc& e )
+		{
+			std::cerr<<e.what()<<std::endl;
+		}
 	}
 	return *this;
 }
@@ -83,17 +109,24 @@ void Vector< T >::push_back( const T& value )
 template< typename T >
 void Vector< T >::new_allocation()
 {
-	m_capacity = m_capacity == 0 ? 1 : m_capacity * 2;
-	T* tempArr = new T[ m_capacity ];
-	if( m_arr != nullptr )
+	try
 	{
-		for( size_t i = 0; i < m_capacity; ++i )
+		m_capacity = m_capacity == 0 ? 1 : m_capacity * 2;
+		T* tempArr = new T[ m_capacity ];
+		if ( m_arr != nullptr )
 		{
-			tempArr[ i ] = m_arr[ i ];
+			for ( size_t i = 0; i < m_capacity; ++i )
+			{
+				tempArr[ i ] = m_arr[ i ];
+			}
+			delete[] m_arr;
 		}
-		delete[] m_arr;
+		m_arr = tempArr;
 	}
-	m_arr = tempArr;
+	catch( std::bad_alloc& e )
+	{
+		std::cerr<<e.what()<<std::endl;
+	}
 }
 
 template< typename T >
