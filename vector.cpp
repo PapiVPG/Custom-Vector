@@ -121,7 +121,12 @@ void Vector< T >::pop_back()
 template< typename T >
 void Vector< T >::clear()
 {
-	this->~Vector();
+	m_capacity = m_size = 0;
+	if ( m_arr )
+	{
+		delete[]m_arr;
+	}
+	m_arr = nullptr;
 }
 
 template< typename T >

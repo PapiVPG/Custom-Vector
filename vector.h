@@ -8,7 +8,7 @@ public:
 	explicit Vector( const Vector& vector );
 	explicit Vector( Vector&& vector ) noexcept;
 	explicit Vector( size_t size );
-	~Vector() { delete[] m_arr; m_size = m_capacity = 0; m_arr = nullptr; };
+	~Vector() { clear(); };
 
 	void push_back( T value );
 	bool empty();
