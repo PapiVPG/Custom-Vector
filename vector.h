@@ -6,7 +6,7 @@ class Vector {
 public:
 	explicit Vector();
 	explicit Vector( const Vector& vector );
-	explicit Vector( Vector&& vector );
+	explicit Vector( Vector&& vector ) noexcept;
 	explicit Vector( size_t size );
 	~Vector() { delete[] m_arr; m_size = m_capacity = 0; m_arr = nullptr; };
 
@@ -18,7 +18,7 @@ public:
 	void clear();
 
 	Vector< T >& operator=( const Vector< T >& vector );
-	Vector< T >& operator=( Vector< T >&& vector );
+	Vector< T >& operator=( Vector< T >&& vector ) noexcept;
 	T& operator[]( size_t index ) const;
 	T* begin();
 	T* end();

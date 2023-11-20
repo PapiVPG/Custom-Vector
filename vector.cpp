@@ -8,7 +8,7 @@ template<typename T>
 Vector< T >::Vector( const Vector& vector )
 {
 	m_size = vector.m_size;
-	m_capacity = vector.capacity;
+	m_capacity = vector.m_capacity;
 	m_arr = new T[ m_capacity ];
 	for( size_t i = 0; i < m_capacity; i++ )
 	{
@@ -17,16 +17,13 @@ Vector< T >::Vector( const Vector& vector )
 }
 
 template< typename T >
-Vector< T >::Vector( Vector&& vector )
+Vector< T >::Vector( Vector&& vector ) noexcept
 {
-	m_size = m_capacity = vector.size();
-
-	m_arr = new T[ m_size ];
-	for( size_t i = 0; i < m_size; i++ )
-	{
-		m_arr[ i ] = vector[ i ];
-	}
-	vector.~Vector();
+	m_size = vector.m_size;
+	m_capacity = vector.m_capacity;
+	m_arr = vector.m_arr;
+	vector.m_capacity = vector.m_size = 0;
+	vector.m_arr = nullptr;
 }
 
 template< typename T >
@@ -53,7 +50,7 @@ Vector< T >& Vector< T >::operator=( const Vector< T >& vector )
 }
 
 template<typename T>
-Vector< T >& Vector< T >::operator=( Vector< T >&& vector )
+Vector< T >& Vector< T >::operator=( Vector< T >&& vector ) noexcept
 {
 	if( this != &vector )
 	{
