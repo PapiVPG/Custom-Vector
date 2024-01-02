@@ -238,7 +238,7 @@ template< typename T >
 typename Vector< T >::iterator Vector< T >::insert( typename Vector< T >::const_iterator position, const T& value )
 {
 	size_t index = position - m_arr;
-	if (index >= 0 && index < cend() )
+	if ( index >= 0 && index <= m_size )
 	{
 		resize( size() + 1 );
 		for ( size_t i = size() - 1; i > index; --i )
@@ -252,7 +252,7 @@ typename Vector< T >::iterator Vector< T >::insert( typename Vector< T >::const_
 	{
 		std::cout << "Out of range" << std::endl;
 	}
-	return cend();
+	return iterator( cend() );
 }
 
 template< typename T >
