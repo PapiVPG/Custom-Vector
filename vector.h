@@ -6,6 +6,9 @@
 template< typename T >
 class Vector {
 public:
+	typedef T* iterator;
+	typedef const T* const_iterator;
+
 	explicit Vector();
 	explicit Vector( const Vector& vector );
 	explicit Vector( Vector&& vector ) noexcept;
@@ -24,14 +27,15 @@ public:
 	T& front() const;
 	T& back() const;
 	void clear();
+	iterator insert( const_iterator position, const T& val );
 
 	Vector< T >& operator=( const Vector< T >& vector );
 	Vector< T >& operator=( Vector< T >&& vector ) noexcept;
 	T& operator[]( const size_t index );
 	T* begin();
 	T* end();
-	const T* cbegin();
-	const T* cend();
+	const T* cbegin() const;
+	const T* cend() const;
 
 private:
 	T* m_arr;

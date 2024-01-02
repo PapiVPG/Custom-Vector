@@ -235,6 +235,27 @@ void Vector< T >::clear()
 }
 
 template< typename T >
+typename Vector< T >::iterator Vector< T >::insert( typename Vector< T >::const_iterator position, const T& value )
+{
+	size_t index = position - m_arr;
+	if (index >= 0 && index < cend() )
+	{
+		resize( size() + 1 );
+		for ( size_t i = size() - 1; i > index; --i )
+		{
+			m_arr[ i ] = m_arr[ i - 1 ];
+		}
+		m_arr[ index ] = value;
+		return iterator( cbegin() + index );
+	}
+	else
+	{
+		std::cout << "Out of range" << std::endl;
+	}
+	return cend();
+}
+
+template< typename T >
 T& Vector< T >::operator[]( const size_t index )
 {
 	assert( ( "index is bigger than size of the vector", index < m_size ) );
@@ -248,7 +269,7 @@ T* Vector< T >::begin()
 }
 
 template< typename T >
-const T* Vector< T >::cbegin()
+const T* Vector< T >::cbegin() const
 {
 	return m_size > 0 ? m_arr : nullptr;
 }
@@ -260,7 +281,7 @@ T* Vector< T >::end()
 }
 
 template< typename T >
-const T* Vector< T >::cend()
+const T* Vector< T >::cend() const
 {
 	return m_size > 0 ? m_arr : nullptr;
 }
