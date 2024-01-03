@@ -196,7 +196,7 @@ T& Vector< T >::at(const size_t pos) const
 {
 	if( pos >= m_size )
 	{
-		throw "at(): " + std::to_string( pos ) + "Position out of range\n";
+		throw std::out_of_range( "Index out of range" );
 	}
 	return m_arr[ pos ];
 }
@@ -221,6 +221,12 @@ T& Vector< T >::back() const
 	}
 	T temp;
 	return temp;
+}
+
+template<typename T>
+T* Vector<T>::data() const noexcept
+{
+	return m_arr;
 }
 
 template< typename T >
@@ -263,7 +269,7 @@ T& Vector< T >::operator[]( const size_t index )
 }
 
 template< typename T >
-T* Vector< T >::begin()
+T* Vector< T >::begin() const
 {
 	return m_size > 0 ? m_arr : nullptr;
 }
@@ -275,7 +281,7 @@ const T* Vector< T >::cbegin() const
 }
 
 template< typename T >
-T* Vector< T >::end()
+T* Vector< T >::end() const
 {
 	return m_arr + m_size;
 }
@@ -284,4 +290,28 @@ template< typename T >
 const T* Vector< T >::cend() const
 {
 	return m_size > 0 ? m_arr : nullptr;
+}
+
+template< typename T >
+T* Vector< T >::rbegin() const
+{
+	return std::reverse_iterator< T* >( data + size );
+}
+
+template< typename T >
+const T* Vector< T >::crbegin() const
+{
+	return std::reverse_iterator< T* >(data + size);
+}
+
+template<typename T>
+T* Vector< T >::rend() const
+{
+	return std::reverse_iterator< T* >( data );
+}
+
+template<typename T>
+const T* Vector< T >::crend() const
+{
+	return std::reverse_iterator< T* >(data);
 }

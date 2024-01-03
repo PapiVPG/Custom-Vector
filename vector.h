@@ -26,16 +26,21 @@ public:
 	T& at( const size_t pos ) const;
 	T& front() const;
 	T& back() const;
+	T* data() const noexcept;
 	void clear();
 	iterator insert( const_iterator position, const T& val );
 
 	Vector< T >& operator=( const Vector< T >& vector );
 	Vector< T >& operator=( Vector< T >&& vector ) noexcept;
 	T& operator[]( const size_t index );
-	T* begin();
-	T* end();
+	T* begin() const;
+	T* end() const;
 	const T* cbegin() const;
 	const T* cend() const;
+	T* rbegin() const;
+	T* rend() const;
+	const T* crbegin() const;
+	const T* crend() const;
 
 private:
 	T* m_arr;
