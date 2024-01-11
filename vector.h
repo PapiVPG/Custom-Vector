@@ -21,6 +21,7 @@ public:
 	void assign( size_t count, const T& value );
 	size_t size() const;
 	void resize( const size_t count );
+	void reserve( const size_t count );
 	size_t capacity() const;
 	void pop_back();
 	T& at( const size_t pos ) const;

@@ -177,6 +177,18 @@ void Vector< T >::resize( const size_t count )
 }
 
 template< typename T >
+void Vector< T >::reserve( const size_t count )
+{
+	if( count > m_size )
+	{
+		while( count > m_capacity )
+		{
+			new_allocation();
+		}
+	}
+}
+
+template< typename T >
 size_t Vector< T >::capacity() const
 {
 	return m_capacity;
