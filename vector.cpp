@@ -114,6 +114,37 @@ void Vector< T >::push_back( const T& value )
 }
 
 template< typename T >
+template< typename... Args >
+typename Vector< T >::iterator Vector< T >::emplace_back( Args && ...args )
+{
+	if( m_size == m_capacity )
+	{
+		reserve( 2 * m_capacity );
+	}
+	m_arr[ m_size++ ] = std::move( T( std::forward<Args>( args )... ) );
+	return end() - 1;
+}
+
+template<typename T>
+template<typename ...Args>
+typename Vector<T>::iterator Vector<T>::emplace( typename Vector<T>::const_iterator pos, Args && ...args )
+{
+	size_t index = pos - m_arr;
+	if( m_size == m_capacity )
+	{
+		reserve( 2 * m_capacity );
+	}
+	for( size_t i = m_size; i > index; --i )
+	{
+		m_arr[ i ] = std::move( m_arr[ i - 1 ] );
+	}
+	m_arr[ index ] = std::move( T( std::forward<Args>( args )... ) );
+	++m_size;
+
+	return m_arr + index - 1;
+}
+
+template< typename T >
 void Vector< T >::new_allocation()
 {
 	try
@@ -124,7 +155,7 @@ void Vector< T >::new_allocation()
 		{
 			for ( size_t i = 0; i < m_size; ++i )
 			{
-				tempArr[ i ] = m_arr[ i ];
+				tempArr[ i ] = std::move( m_arr[ i ] );
 			}
 			delete[] m_arr;
 		}
@@ -261,7 +292,7 @@ typename Vector< T >::iterator Vector< T >::insert( typename Vector< T >::const_
 		resize( size() + 1 );
 		for ( size_t i = size() - 1; i > index; --i )
 		{
-			m_arr[ i ] = m_arr[ i - 1 ];
+			m_arr[ i ] = std::move( m_arr[ i - 1 ] );
 		}
 		m_arr[ index ] = value;
 		return iterator( cbegin() + index );

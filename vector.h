@@ -17,6 +17,10 @@ public:
 	~Vector() { clear(); };
 
 	void push_back( const T& value );
+	template < typename... Args >
+	iterator emplace_back( Args&&... args );
+	template< typename... Args >
+	iterator emplace( const_iterator pos, Args&&... args );
 	bool empty();
 	void assign( size_t count, const T& value );
 	size_t size() const;
